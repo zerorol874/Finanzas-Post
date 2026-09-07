@@ -343,7 +343,10 @@ nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),fir
         { id: '3', date: '2026-09-03', type: 'gasto', amount: 65000, category: 'Supermercado', accountId: '1', note: 'Compras del mes' },
         { id: '4', date: '2026-09-05', type: 'gasto', amount: 25000, category: 'Servicios', accountId: '1', note: 'Luz y Agua' }
       ],
-      budgets: { 'Supermercado': 100000, 'Servicios': 50000 }
+      budgets: [
+      { category: 'Supermercado', amount: 100000 },
+      { category: 'Servicios', amount: 50000 }
+    ]
     };
 
     localStorage.setItem('data', JSON.stringify(demoState));
