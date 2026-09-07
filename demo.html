@@ -1,6 +1,33 @@
 <!doctype html>
 <html lang="es">
 <head>
+ <script>
+// Inyección directa antes de cargar la app
+(function() {
+  const K = 'finanzas_pia_pro_data';
+  const hoy = new Date();
+  const y = hoy.getFullYear();
+  const m = String(hoy.getMonth() + 1).padStart(2, '0');
+
+  // Solo inyectar si no existe o si está vacío
+  const actual = localStorage.getItem(K);
+  if (!actual || actual.includes('"movimientos":[]')) {
+    const demoData = {
+      profile: { name: 'Cliente Demo', company: 'Demo Pro', currency: 'CLP' },
+      movimientos: [
+        { id: '1', fecha: `${y}-${m}-01`, tipo: 'ingreso', monto: 1200000, categoria: 'Sueldo', descripcion: 'Sueldo mensual', cuenta: 'Efectivo', medio: 'Transferencia' },
+        { id: '2', fecha: `${y}-${m}-02`, tipo: 'gasto', monto: 350000, categoria: 'Arriendo', descripcion: 'Pago arriendo', cuenta: 'Efectivo', medio: 'Transferencia' },
+        { id: '3', fecha: `${y}-${m}-03`, tipo: 'gasto', monto: 65000, categoria: 'Supermercado', descripcion: 'Compras del mes', cuenta: 'Efectivo', medio: 'Débito' },
+        { id: '4', fecha: `${y}-${m}-05`, tipo: 'gasto', monto: 25000, categoria: 'Servicios', descripcion: 'Luz y Agua', cuenta: 'Efectivo', medio: 'Débito' }
+      ],
+      cuentas: [{ id: 'c1', nombre: 'Efectivo', tipo: 'Efectivo', saldoInicial: 0 }],
+      tarjetas: [], deudas: [], inversiones: [], metas: [], presupuestos: [], categorias: []
+    };
+    localStorage.setItem(K, JSON.stringify(demoData));
+    localStorage.setItem('demo_loaded_v2', 'true');
+  }
+})();
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mis Finanzas Personales</title>
@@ -317,33 +344,9 @@ window.addEventListener('afterprint',()=>document.body.classList.remove('print-r
 function resetAll(){if(confirm('¿Seguro? Se borrarán todos los datos guardados en este navegador.')){localStorage.removeItem(K);data=structuredClone(defaultData);persist()}}
 function showModal(x){document.getElementById(x).classList.add('show')}function closeModal(x){document.getElementById(x).classList.remove('show')}
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
-nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),first=new Date(dd.getFullYear(),dd.getMonth(),1);rFrom.value=first.toISOString().slice(0,10);rTo.value=today();renderAll();
+nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),first=new Date(dd.getFullYear(),dd.getMonth(),1);rFrom.value=first.toISOString().slice(0,10);rTo.value=today();renderAll();</script>
 <script>
-// 1. Carga de datos garantizada para la Demo
-(function() {
-  const K = 'finanzas_pia_pro_data';
-  const hoy = new Date();
-  const a = hoy.getFullYear();
-  const m = String(hoy.getMonth() + 1).padStart(2, '0');
-
-  // Datos adaptados a la fecha actual y estructura exacta del app
-  const demoData = {
-    profile: { name: 'Cliente Demo', company: 'Demo Pro' },
-    movimientos: [
-      { id: '1', fecha: `${a}-${m}-01`, tipo: 'ingreso', monto: 1200000, categoria: 'Sueldo', descripcion: 'Sueldo mensual', cuenta: 'Efectivo', medio: 'Transferencia' },
-      { id: '2', fecha: `${a}-${m}-02`, tipo: 'gasto', monto: 350000, categoria: 'Arriendo', descripcion: 'Pago arriendo', cuenta: 'Efectivo', medio: 'Transferencia' },
-      { id: '3', fecha: `${a}-${m}-03`, tipo: 'gasto', monto: 65000, categoria: 'Supermercado', descripcion: 'Compras del mes', cuenta: 'Efectivo', medio: 'Débito' },
-      { id: '4', fecha: `${a}-${m}-05`, tipo: 'gasto', monto: 25000, categoria: 'Servicios', descripcion: 'Luz y Agua', cuenta: 'Efectivo', medio: 'Débito' }
-    ],
-    cuentas: [{ id: 'c1', nombre: 'Efectivo', tipo: 'Efectivo', saldoInicial: 0 }],
-    tarjetas: [], deudas: [], inversiones: [], metas: [], presupuestos: [], categorias: []
-  };
-
-  // Sobrescribir datos de la demo para forzar carga limpia
-  localStorage.setItem(K, JSON.stringify(demoData));
-})();
-
-// 2. Temporizador de 5 minutos (300,000 milisegundos)
+// Temporizador de 5 minutos (300,000 milisegundos)
 setTimeout(function() {
   const overlay = document.createElement('div');
   overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15,31,45,0.97);color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:sans-serif;';
