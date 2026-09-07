@@ -357,27 +357,28 @@ nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),fir
 
 // 2. Temporizador de 5 minutos activo
 (function startTimer() {
-  let timeLeft = 300; // 300 segundos = 5 minutos
-  const timerDisplay = document.getElementById('demo-timer') || document.getElementById('timer-count');
-  const lockScreen = document.getElementById('demo-lock-screen');
+    let timeLeft = 300; // 300 segundos = 5 minutos
+    const timerDisplay = document.getElementById('demo-timer');
+    const lockScreen = document.getElementById('demo-lock-screen');
 
-  const countdown = setInterval(function() {
-    timeLeft--;
+    const countdown = setInterval(function() {
+        timeLeft--;
 
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    const formatted = (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        const formatted = (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 
-    if (timerDisplay) {
-      timerDisplay.textContent = formatted;
-    }
+        if (timerDisplay) {
+            timerDisplay.textContent = formatted;
+        }
 
-    if (timeLeft <= 0) {
-      clearInterval(countdown);
-      if (lockScreen) {
-        lockScreen.style.display = 'flex';
-      }
-  }, 1000);
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            if (lockScreen) {
+                lockScreen.style.display = 'flex';
+            }
+        }
+    }, 1000);
 })();
 </script>
 </body>  
