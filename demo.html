@@ -329,36 +329,49 @@ document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if
 nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),first=new Date(dd.getFullYear(),dd.getMonth(),1);rFrom.value=first.toISOString().slice(0,10);rTo.value=today();renderAll();
 </script>
 <script>
-  // Precargar datos de prueba para la Demo si no existen
-  if (!localStorage.getItem('finanzas_data_demo_loaded')) {
+  // Precargar datos completos para la Demo si no existen
+  if (!localStorage.getItem('finanzas_data_demo_v2')) {
     const demoData = {
-      movimientos: [
-        { id: 1, fecha: '2026-09-01', tipo: 'ingreso', monto: 1200000, categoria: 'Sueldo', descripcion: 'Sueldo mensual' },
-        { id: 2, fecha: '2026-09-02', tipo: 'gasto', monto: 350000, categoria: 'Arriendo', descripcion: 'Pago arriendo' },
-        { id: 3, fecha: '2026-09-03', tipo: 'gasto', monto: 65000, categoria: 'Supermercado', descripcion: 'Compras del mes' },
-        { id: 4, fecha: '2026-09-05', tipo: 'gasto', monto: 25000, categoria: 'Servicios', descripcion: 'Luz y Agua' }
-      ]
+      profile: { name: 'Usuario Demo', currency: '$', company: 'Empresa Demo' },
+      accounts: [
+        { id: 1, name: 'Cuenta Corriente', balance: 850000, type: 'debito' },
+        { id: 2, name: 'Tarjeta Crédito', balance: -150000, type: 'credito' }
+      ],
+      moves: [
+        { id: 1, date: '2026-09-01', type: 'ingreso', amount: 1200000, category: 'Sueldo', accountId: 1, note: 'Sueldo mensual' },
+        { id: 2, date: '2026-09-02', type: 'gasto', amount: 350000, category: 'Arriendo', accountId: 1, note: 'Pago arriendo' },
+        { id: 3, date: '2026-09-03', type: 'gasto', amount: 65000, category: 'Supermercado', accountId: 1, note: 'Compras del mes' },
+        { id: 4, date: '2026-09-05', type: 'gasto', amount: 25000, category: 'Servicios', accountId: 1, note: 'Luz y Agua' }
+      ],
+      budgets: { 'Supermercado': 100000, 'Servicios': 50000 }
     };
-    localStorage.setItem('finanzas_data', JSON.stringify(demoData));
-    localStorage.setItem('finanzas_data_demo_loaded', 'true');
+    
+    // Guardar en la clave principal de la app
+    localStorage.setItem('finanzas_pwa_data', JSON.stringify(demoData));
+    localStorage.setItem('finanzas_data_demo_v2', 'true');
+    
+    // Recargar una vez para renderizar los datos
+    window.location.reload();
   }
 
   // Temporizador de 5 minutos para bloqueo de Demo
-  let timeLeft = 300; // 300 segundos = 5 minutos
+  let timeLeft = 300; 
   const timerDisplay = document.getElementById('demo-timer');
   const lockScreen = document.getElementById('demo-lock-screen');
 
-  const countdown = setInterval(() => {
-    timeLeft--;
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    timerDisplay.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  if (timerDisplay && lockScreen) {
+    const countdown = setInterval(() => {
+      timeLeft--;
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerDisplay.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
-    if (timeLeft <= 0) {
-      clearInterval(countdown);
-      lockScreen.style.display = 'flex';
-    }
-  }, 1000);
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        lockScreen.style.display = 'flex';
+      }
+    }, 1000);
+  }
 </script>
 </body>  
 </html>
