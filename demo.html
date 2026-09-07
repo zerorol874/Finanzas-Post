@@ -329,32 +329,35 @@ document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if
 nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),first=new Date(dd.getFullYear(),dd.getMonth(),1);rFrom.value=first.toISOString().slice(0,10);rTo.value=today();renderAll();
 </script>
 <script>
-  // Precargar datos completos para la Demo si no existen
-  if (!localStorage.getItem('finanzas_data_demo_v2')) {
-    const demoData = {
+  // 1. Inyectar datos de prueba directo en las variables del sistema si está vacío
+  (function initDemoData() {
+    const demoState = {
       profile: { name: 'Usuario Demo', currency: '$', company: 'Empresa Demo' },
       accounts: [
-        { id: 1, name: 'Cuenta Corriente', balance: 850000, type: 'debito' },
-        { id: 2, name: 'Tarjeta Crédito', balance: -150000, type: 'credito' }
+        { id: '1', name: 'Cuenta Corriente', balance: 850000, type: 'debito' },
+        { id: '2', name: 'Tarjeta Crédito', balance: -150000, type: 'credito' }
       ],
       moves: [
-        { id: 1, date: '2026-09-01', type: 'ingreso', amount: 1200000, category: 'Sueldo', accountId: 1, note: 'Sueldo mensual' },
-        { id: 2, date: '2026-09-02', type: 'gasto', amount: 350000, category: 'Arriendo', accountId: 1, note: 'Pago arriendo' },
-        { id: 3, date: '2026-09-03', type: 'gasto', amount: 65000, category: 'Supermercado', accountId: 1, note: 'Compras del mes' },
-        { id: 4, date: '2026-09-05', type: 'gasto', amount: 25000, category: 'Servicios', accountId: 1, note: 'Luz y Agua' }
+        { id: '1', date: '2026-09-01', type: 'ingreso', amount: 1200000, category: 'Sueldo', accountId: '1', note: 'Sueldo mensual' },
+        { id: '2', date: '2026-09-02', type: 'gasto', amount: 350000, category: 'Arriendo', accountId: '1', note: 'Pago arriendo' },
+        { id: '3', date: '2026-09-03', type: 'gasto', amount: 65000, category: 'Supermercado', accountId: '1', note: 'Compras del mes' },
+        { id: '4', date: '2026-09-05', type: 'gasto', amount: 25000, category: 'Servicios', accountId: '1', note: 'Luz y Agua' }
       ],
       budgets: { 'Supermercado': 100000, 'Servicios': 50000 }
     };
-    
-    // Guardar en la clave principal de la app
-    localStorage.setItem('finanzas_pwa_data', JSON.stringify(demoData));
-    localStorage.setItem('finanzas_data_demo_v2', 'true');
-    
-    // Recargar una vez para renderizar los datos
-    window.location.reload();
-  }
 
-  // Temporizador de 5 minutos para bloqueo de Demo
+    // Guardar en todas las claves posibles que use tu app
+    localStorage.setItem('data', JSON.stringify(demoState));
+    localStorage.setItem('finanzas_data', JSON.stringify(demoState));
+    
+    // Si existe la variable global data en tu código, la actualizamos y renderizamos
+    if (typeof data !== 'undefined') {
+      Object.assign(data, demoState);
+      if (typeof renderAll === 'function') renderAll();
+    }
+  })();
+
+  // 2. Temporizador de 5 minutos
   let timeLeft = 300; 
   const timerDisplay = document.getElementById('demo-timer');
   const lockScreen = document.getElementById('demo-lock-screen');
