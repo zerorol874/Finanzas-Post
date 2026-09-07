@@ -93,7 +93,7 @@ body{background:linear-gradient(180deg,#eef3f4 0,#f7f9fa 320px,#f7f9fa 100%);let
 </head>
 <body>
  <div id="demo-banner" style="background-color: #0F5F70; color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; position: sticky; top: 0; z-index: 9999; display: flex; justify-content: center; align-items: center; gap: 15px;">
-  <span>🚀 Versión Demo (Tiempo restante: <span id="demo-count" style="color: #FFD700; font-size: 16px;">05:00</span>)</span>
+  <span>🚀 Versión Demo (Tiempo restante: <span id="demo-timer" style="color: #FFD700; font-size: 16px;">05:00</span>)</span>
   <a href="https://wa.me/56966964087?text=Hola,%20prob%C3%A9%20la%20demo%20y%20quiero%20comprar%20la%20plantilla%20completa" target="_blank" style="color: #FFD700; text-decoration: underline;">
     ¡Haz clic aquí para comprar la versión completa!
   </a>
@@ -355,7 +355,7 @@ nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),fir
     }
   })();
 
- // 2. Temporizador de 5 minutos activo
+// 2. Temporizador de 5 minutos activo
 (function startTimer() {
   let timeLeft = 300; // 300 segundos = 5 minutos
   const timerDisplay = document.getElementById('demo-timer') || document.getElementById('timer-count');
@@ -363,6 +363,7 @@ nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),fir
 
   const countdown = setInterval(function() {
     timeLeft--;
+
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
     const formatted = (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
@@ -375,19 +376,9 @@ nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),fir
       clearInterval(countdown);
       if (lockScreen) {
         lockScreen.style.display = 'flex';
-      } else {
-        const overlay = document.createElement('div');
-        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15,31,45,0.97);color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:sans-serif;';
-        overlay.innerHTML = `
-          <h1 style="font-size:32px;margin-bottom:15px;color:#2d8190;">⌛ El tiempo de prueba ha expirado</h1>
-          <p style="font-size:18px;max-width:500px;margin-bottom:25px;line-height:1.5;">Has alcanzado el límite de 5 minutos de la Versión Demo.</p>
-          <a href="https://wa.me/TU_NUMERO_DE_TELEFONO?text=Hola,%20quiero%20comprar%20la%20versión%20completa" style="background-color:#16825d;color:white;padding:15px 30px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:18px;">🛒 Comprar Versión Completa</a>
-        `;
-        document.body.appendChild(overlay);
       }
     }
   }, 1000);
 })();
-</script>
 </body>  
 </html>
