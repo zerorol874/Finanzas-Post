@@ -92,12 +92,21 @@ body{background:linear-gradient(180deg,#eef3f4 0,#f7f9fa 320px,#f7f9fa 100%);let
 </style>
 </head>
 <body>
-  <div style="background-color: #0F5F70; color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; position: sticky; top: 0; z-index: 9999;">
-  🚀 Estás probando la Versión Demo. 
-  <a href="https://wa.me/56966964087?text=Hola,%20prob%C3%A9%20la%20demo%20y%20quiero%20comprar%20la%20plantilla%20completa" target="_blank" style="color: #FFD700; text-decoration: underline; margin-left: 10px;">
-    ¡Haz clic aquí para comprar la versión completa ilimitada!
+ <div id="demo-banner" style="background-color: #0F5F70; color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; position: sticky; top: 0; z-index: 9999; display: flex; justify-content: center; align-items: center; gap: 15px;">
+  <span>🚀 Versión Demo (Tiempo restante: <span id="demo-timer" style="color: #FFD700; font-size: 16px;">05:00</span>)</span>
+  <a href="https://wa.me/56966964087?text=Hola,%20prob%C3%A9%20la%20demo%20y%20quiero%20comprar%20la%20plantilla%20completa" target="_blank" style="color: #FFD700; text-decoration: underline;">
+    ¡Haz clic aquí para comprar la versión completa!
   </a>
 </div>
+
+<!-- Pantalla de Bloqueo al finalizar el tiempo -->
+<div id="demo-lock-screen" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(15, 95, 112, 0.98); z-index: 999999; color: white; text-align: center; justify-content: center; align-items: center; flex-direction: column; padding: 20px;">
+  <h1 style="font-size: 32px; margin-bottom: 10px; color: #FFD700;">🔒 Tiempo de Prueba Finalizado</h1>
+  <p style="font-size: 18px; max-width: 500px; margin-bottom: 25px; line-height: 1.5;">El tiempo de prueba de 5 minutos ha terminado. Para continuar gestionando tus finanzas de forma ilimitada, privada y sin restricciones, adquiere la versión completa.</p>
+  <a href="https://wa.me/56966964087?text=Hola,%20se%20venci%C3%B3%20mi%20tiempo%20de%20demo%20y%20quiero%20comprar%20la%20plantilla%20completa" target="_blank" style="background-color: #25D366; color: white; padding: 15px 30px; font-size: 18px; font-weight: bold; text-decoration: none; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+    Obtener Versión Completa por WhatsApp
+  </a>
+</div> 
 <div class="app">
 <aside class="side"><div class="brand"><span class="brand-mark">MF</span><span>Mis Finanzas Personales<small>GESTIÓN Y PLANIFICACIÓN</small></span></div><div class="nav" id="nav">
 <div class="nav-group">Resumen</div>
@@ -321,17 +330,35 @@ nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),fir
 </script>
 <script>
   // Precargar datos de prueba para la Demo si no existen
-if (!localStorage.getItem('finanzas_data_demo_loaded')) {
-  const demoData = {
-    movimientos: [
-      { id: 1, fecha: '2026-09-01', tipo: 'ingreso', monto: 1200000, categoria: 'Sueldo', descripcion: 'Sueldo mensual' },
-      { id: 2, fecha: '2026-09-02', tipo: 'gasto', monto: 350000, categoria: 'Arriendo', descripcion: 'Pago arriendo' },
-      { id: 3, fecha: '2026-09-03', tipo: 'gasto', monto: 65000, categoria: 'Supermercado', descripcion: 'Compras del mes' },
-      { id: 4, fecha: '2026-09-05', tipo: 'gasto', monto: 25000, categoria: 'Servicios', descripcion: 'Luz y Agua' }
-    ]
-  };
-  localStorage.setItem('finanzas_data', JSON.stringify(demoData));
-  localStorage.setItem('finanzas_data_demo_loaded', 'true');
-}
+  if (!localStorage.getItem('finanzas_data_demo_loaded')) {
+    const demoData = {
+      movimientos: [
+        { id: 1, fecha: '2026-09-01', tipo: 'ingreso', monto: 1200000, categoria: 'Sueldo', descripcion: 'Sueldo mensual' },
+        { id: 2, fecha: '2026-09-02', tipo: 'gasto', monto: 350000, categoria: 'Arriendo', descripcion: 'Pago arriendo' },
+        { id: 3, fecha: '2026-09-03', tipo: 'gasto', monto: 65000, categoria: 'Supermercado', descripcion: 'Compras del mes' },
+        { id: 4, fecha: '2026-09-05', tipo: 'gasto', monto: 25000, categoria: 'Servicios', descripcion: 'Luz y Agua' }
+      ]
+    };
+    localStorage.setItem('finanzas_data', JSON.stringify(demoData));
+    localStorage.setItem('finanzas_data_demo_loaded', 'true');
+  }
+
+  // Temporizador de 5 minutos para bloqueo de Demo
+  let timeLeft = 300; // 300 segundos = 5 minutos
+  const timerDisplay = document.getElementById('demo-timer');
+  const lockScreen = document.getElementById('demo-lock-screen');
+
+  const countdown = setInterval(() => {
+    timeLeft--;
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timerDisplay.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+    if (timeLeft <= 0) {
+      clearInterval(countdown);
+      lockScreen.style.display = 'flex';
+    }
+  }, 1000);
+</script>
 </body>  
 </html>
