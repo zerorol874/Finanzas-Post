@@ -319,64 +319,47 @@ function showModal(x){document.getElementById(x).classList.add('show')}function 
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
 nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),first=new Date(dd.getFullYear(),dd.getMonth(),1);rFrom.value=first.toISOString().slice(0,10);rTo.value=today();renderAll();
 <script>
-// 1. Carga de Datos Precargados en la clave correcta de la app
+// 1. Carga de datos garantizada para la Demo
 (function() {
-  const STORAGE_KEY = 'finanzas_pia_pro_data';
-  
-  if (!localStorage.getItem('demo_inicializada')) {
-    const demoData = {
-      profile: { name: 'Cliente Demo', currency: 'CLP' },
-      moves: [
-        { id: '1', date: '2026-09-01', type: 'ingreso', amount: 1200000, cat: 'Sueldo', desc: 'Sueldo mensual', account: 'Efectivo', method: 'Transferencia' },
-        { id: '2', date: '2026-09-02', type: 'gasto', amount: 350000, cat: 'Arriendo', desc: 'Pago arriendo', account: 'Efectivo', method: 'Transferencia' },
-        { id: '3', date: '2026-09-03', type: 'gasto', amount: 65000, cat: 'Supermercado', desc: 'Compras del mes', account: 'Efectivo', method: 'Débito' },
-        { id: '4', date: '2026-09-05', type: 'gasto', amount: 25000, cat: 'Servicios', desc: 'Luz y Agua', account: 'Efectivo', method: 'Débito' }
-      ],
-      accounts: [{ name: 'Efectivo', type: 'cash', balance: 760000 }],
-      cards: [], debts: [], investments: [], goals: [], budgets: [], categories: []
-    };
-    
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(demoData));
-    localStorage.setItem('demo_inicializada', 'true');
-    
-    // Forzar renderizado si la app ya cargó
-    if (typeof render === 'function') render();
-  }
+  const K = 'finanzas_pia_pro_data';
+  const hoy = new Date();
+  const a = hoy.getFullYear();
+  const m = String(hoy.getMonth() + 1).padStart(2, '0');
+
+  // Datos adaptados a la fecha actual y estructura exacta del app
+  const demoData = {
+    profile: { name: 'Cliente Demo', company: 'Demo Pro' },
+    movimientos: [
+      { id: '1', fecha: `${a}-${m}-01`, tipo: 'ingreso', monto: 1200000, categoria: 'Sueldo', descripcion: 'Sueldo mensual', cuenta: 'Efectivo', medio: 'Transferencia' },
+      { id: '2', fecha: `${a}-${m}-02`, tipo: 'gasto', monto: 350000, categoria: 'Arriendo', descripcion: 'Pago arriendo', cuenta: 'Efectivo', medio: 'Transferencia' },
+      { id: '3', fecha: `${a}-${m}-03`, tipo: 'gasto', monto: 65000, categoria: 'Supermercado', descripcion: 'Compras del mes', cuenta: 'Efectivo', medio: 'Débito' },
+      { id: '4', fecha: `${a}-${m}-05`, tipo: 'gasto', monto: 25000, categoria: 'Servicios', descripcion: 'Luz y Agua', cuenta: 'Efectivo', medio: 'Débito' }
+    ],
+    cuentas: [{ id: 'c1', nombre: 'Efectivo', tipo: 'Efectivo', saldoInicial: 0 }],
+    tarjetas: [], deudas: [], inversiones: [], metas: [], presupuestos: [], categorias: []
+  };
+
+  // Sobrescribir datos de la demo para forzar carga limpia
+  localStorage.setItem(K, JSON.stringify(demoData));
 })();
 
-// 2. Temporizador de 5 minutos para bloquear la Demo
+// 2. Temporizador de 5 minutos (300,000 milisegundos)
 setTimeout(function() {
-  // Crear la pantalla de bloqueo
   const overlay = document.createElement('div');
-  overlay.style.position = 'fixed';
-  overlay.style.top = '0';
-  overlay.style.left = '0';
-  overlay.style.width = '100vw';
-  overlay.style.height = '100vh';
-  overlay.style.backgroundColor = 'rgba(15, 31, 45, 0.96)';
-  overlay.style.color = '#ffffff';
-  overlay.style.zIndex = '999999';
-  overlay.style.display = 'flex';
-  overlay.style.flexDirection = 'column';
-  overlay.style.justifyContent = 'center';
-  overlay.style.alignItems = 'center';
-  overlay.style.textAlign = 'center';
-  overlay.style.padding = '20px';
-  overlay.style.fontFamily = 'sans-serif';
-
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15,31,45,0.97);color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:sans-serif;';
+  
   overlay.innerHTML = `
-    <h1 style="font-size: 32px; margin-bottom: 15px; color: #2d8190;">⌛ El tiempo de prueba ha expirado</h1>
-    <p style="font-size: 18px; max-width: 500px; margin-bottom: 25px; line-height: 1.5;">
-      Has alcanzado el límite de 5 minutos de la Versión Demo. Para continuar gestionando tus finanzas sin restricciones, adquiere la plantilla completa.
+    <h1 style="font-size:32px;margin-bottom:15px;color:#2d8190;">⌛ Tiempo de prueba expirado</h1>
+    <p style="font-size:18px;max-width:500px;margin-bottom:25px;line-height:1.5;">
+      Has alcanzado el límite de 5 minutos de la Versión Demo. Para continuar utilizando la plantilla, adquiere la versión completa.
     </p>
-    <a href="https://wa.me/56966984087?text=Hola,%20se%20me%20venció%20el%20tiempo%20de%20demo%20y%20quiero%20comprar%20la%20versión%20completa" 
-       style="background-color: #16825d; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px;">
+    <a href="https://wa.me/TU_NUMERO_DE_TELEFONO?text=Hola,%20se%20me%20venci%C3%B3%20el%20tiempo%20de%20demo%20y%20quiero%20comprar%20la%20versi%C3%B3n%20completa" 
+       style="background-color:#16825d;color:white;padding:15px 30px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:18px;">
        🛒 Comprar Versión Completa
     </a>
   `;
-
   document.body.appendChild(overlay);
-}, 300000); // 300000 ms = 5 minutos
+}, 300000);
 </script>
 </body>
 </html>
