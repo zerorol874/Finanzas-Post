@@ -318,8 +318,8 @@ function showModal(x){document.getElementById(x).classList.add('show')}function 
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
 nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),first=new Date(dd.getFullYear(),dd.getMonth(),1);rFrom.value=first.toISOString().slice(0,10);rTo.value=today();renderAll();
 
-  // Vigilante que detecta cuando aparece el botón "Restaurar" en la pantalla
-const observerRestaurar = new MutationObserver(() => {
+  // Función para buscar y crear el botón de contraseña
+function insertarBotonPassword() {
     const botones = Array.from(document.querySelectorAll('button'));
     const btnRestaurar = botones.find(el => el.textContent && el.textContent.includes('Restaurar'));
     const btnPassExiste = document.getElementById('btn-config-password');
@@ -341,9 +341,14 @@ const observerRestaurar = new MutationObserver(() => {
 
         btnRestaurar.parentNode.insertBefore(btnPass, btnRestaurar.nextSibling);
     }
-});
+}
 
-observerRestaurar.observe(document.body, { childList: true, subtree: true });
+  // Ejecutar al cargar la página y cada vez que interactúes con la app
+window.addEventListener('DOMContentLoaded', insertarBotonPassword);
+window.addEventListener('load', insertarBotonPassword);
+document.addEventListener('click', () => {
+    setTimeout(insertarBotonPassword, 200);
+}); 
 
 // LÓGICA DE CONTRASEÑA Y BLOQUEO
 function configurarPassword() {
