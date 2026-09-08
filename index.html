@@ -317,30 +317,29 @@ function resetAll(){if(confirm('¿Seguro? Se borrarán todos los datos guardados
 function showModal(x){document.getElementById(x).classList.add('show')}function closeModal(x){document.getElementById(x).classList.remove('show')}
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
 nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),first=new Date(dd.getFullYear(),dd.getMonth(),1);rFrom.value=first.toISOString().slice(0,10);rTo.value=today();renderAll();
-  
-// VIGILANTE DEFINITIVO PARA ENLACES Y BOTONES DE RESPALDO
+
+// VIGILANTE DIRECTO POR CLASE O ID DE RESPALDO
 const observer = new MutationObserver(() => {
-    const btnRestaurar = document.getElementById('btnRestaurar') || 
-                         Array.from(document.querySelectorAll('button, a, div, span')).find(el => el.textContent.trim().toLowerCase().includes('restaurar respaldo'));
+    // Buscamos el botón de 'Restaurar respaldo' por su texto exacto o botón verde/secundario
+    const btnRestaurar = Array.from(document.querySelectorAll('button')).find(el => el.textContent.includes('Restaurar'));
     
     if (btnRestaurar && !document.getElementById('btn-config-password')) {
         const btnPass = document.createElement('button');
         btnPass.id = 'btn-config-password';
         btnPass.type = 'button';
         btnPass.innerHTML = '⚙️ Configurar Contraseña';
-        btnPass.className = btnRestaurar.className; // Hereda el estilo exacto
+        btnPass.className = btnRestaurar.className; 
         btnPass.style.marginLeft = '10px';
         btnPass.style.backgroundColor = '#4f46e5';
         btnPass.style.color = 'white';
         btnPass.style.cursor = 'pointer';
         btnPass.onclick = configurarPassword;
 
-        // Insertamos nuestro botón justo al lado del elemento encontrado
         btnRestaurar.parentNode.insertBefore(btnPass, btnRestaurar.nextSibling);
     }
 });
 
-observer.observe(document.body, { childList: true, subtree: true });
+observer.observe(document.body, { childList: true, subtree: true });  
 
 // LÓGICA DE CONTRASEÑA Y BLOQUEO
 function configurarPassword() {
