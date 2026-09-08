@@ -318,28 +318,32 @@ function showModal(x){document.getElementById(x).classList.add('show')}function 
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
 nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),first=new Date(dd.getFullYear(),dd.getMonth(),1);rFrom.value=first.toISOString().slice(0,10);rTo.value=today();renderAll();
 
-// Buscar el botón de "Restaurar" por su texto visible en la pantalla
-const botones = Array.from(document.querySelectorAll('button'));
-const btnRestaurar = botones.find(el => el.textContent.includes('Restaurar'));
+  // Vigilante que detecta cuando aparece el botón "Restaurar" en la pantalla
+const observerRestaurar = new MutationObserver(() => {
+    const botones = Array.from(document.querySelectorAll('button'));
+    const btnRestaurar = botones.find(el => el.textContent && el.textContent.includes('Restaurar'));
+    const btnPassExiste = document.getElementById('btn-config-password');
 
-if (btnRestaurar && !document.getElementById('btn-config-password')) {
-    const btnPass = document.createElement('button');
-    btnPass.id = 'btn-config-password';
-    btnPass.type = 'button';
-    btnPass.innerHTML = '⚙️ Configurar Contraseña';
-    btnPass.style.marginLeft = '10px';
-    btnPass.style.backgroundColor = '#4f46e5';
-    btnPass.style.color = 'white';
-    btnPass.style.padding = '8px 12px';
-    btnPass.style.border = 'none';
-    btnPass.style.borderRadius = '4px';
-    btnPass.style.cursor = 'pointer';
+    if (btnRestaurar && !btnPassExiste) {
+        const btnPass = document.createElement('button');
+        btnPass.id = 'btn-config-password';
+        btnPass.type = 'button';
+        btnPass.innerHTML = '⚙️ Configurar Contraseña';
+        btnPass.style.marginLeft = '10px';
+        btnPass.style.backgroundColor = '#4f46e5';
+        btnPass.style.color = 'white';
+        btnPass.style.padding = '8px 12px';
+        btnPass.style.border = 'none';
+        btnPass.style.borderRadius = '4px';
+        btnPass.style.cursor = 'pointer';
 
-    btnPass.onclick = configurarPassword; // Asegúrate de tener tu función lista
+        btnPass.onclick = configurarPassword;
 
-    // Inserta nuestro botón justo después de "Restaurar respaldo"
-    btnRestaurar.parentNode.insertBefore(btnPass, btnRestaurar.nextSibling);
-}
+        btnRestaurar.parentNode.insertBefore(btnPass, btnRestaurar.nextSibling);
+    }
+});
+
+observerRestaurar.observe(document.body, { childList: true, subtree: true });
 
 // LÓGICA DE CONTRASEÑA Y BLOQUEO
 function configurarPassword() {
