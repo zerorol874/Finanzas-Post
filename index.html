@@ -318,28 +318,40 @@ function showModal(x){document.getElementById(x).classList.add('show')}function 
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
 nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),first=new Date(dd.getFullYear(),dd.getMonth(),1);rFrom.value=first.toISOString().slice(0,10);rTo.value=today();renderAll();
 
-// VIGILANTE DIRECTO POR CLASE O ID DE RESPALDO
+  // VIGILANTE DIRECTO PARA LA SECCIÓN DE CONFIGURACIÓN
 const observer = new MutationObserver(() => {
-    // Buscamos el botón de 'Restaurar respaldo' por su texto exacto o botón verde/secundario
-    const btnRestaurar = Array.from(document.querySelectorAll('button')).find(el => el.textContent.includes('Restaurar'));
-    
-    if (btnRestaurar && !document.getElementById('btn-config-password')) {
+    const seccionDatos = document.getElementById('datos');
+    const btnPassExiste = document.getElementById('btn-config-password');
+
+    // Si estamos en la sección de datos y aún no hemos creado nuestro botón
+    if (seccionDatos && !btnPassExiste) {
         const btnPass = document.createElement('button');
         btnPass.id = 'btn-config-password';
         btnPass.type = 'button';
         btnPass.innerHTML = '⚙️ Configurar Contraseña';
-        btnPass.className = btnRestaurar.className; 
+        btnPass.className = 'btn-config-password'; // O alguna clase existente para que tome estilos
         btnPass.style.marginLeft = '10px';
+        btnPass.style.marginTop = '10px';
         btnPass.style.backgroundColor = '#4f46e5';
         btnPass.style.color = 'white';
         btnPass.style.cursor = 'pointer';
-        btnPass.onclick = configurarPassword;
+        btnPass.style.padding = '8px 12px';
+        btnPass.style.border = 'none';
+        btnPass.style.borderRadius = '4px';
 
-        btnRestaurar.parentNode.insertBefore(btnPass, btnRestaurar.nextSibling);
+        btnPass.onclick = configurarPassword; // Asegúrate de que esta función exista en tu código
+
+        // Buscamos el contenedor de pie de página dentro de datos para ponerlo ahí al lado
+        const sideFoot = seccionDatos.querySelector('.side-foot');
+        if (sideFoot) {
+            sideFoot.parentNode.insertBefore(btnPass, sideFoot.nextSibling);
+        } else {
+            seccionDatos.appendChild(btnPass);
+        }
     }
 });
 
-observer.observe(document.body, { childList: true, subtree: true });  
+observer.observe(document.body, { childList: true, subtree: true });
 
 // LÓGICA DE CONTRASEÑA Y BLOQUEO
 function configurarPassword() {
