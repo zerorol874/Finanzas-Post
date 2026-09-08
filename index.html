@@ -317,23 +317,25 @@ function resetAll(){if(confirm('¿Seguro? Se borrarán todos los datos guardados
 function showModal(x){document.getElementById(x).classList.add('show')}function closeModal(x){document.getElementById(x).classList.remove('show')}
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
 nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),first=new Date(dd.getFullYear(),dd.getMonth(),1);rFrom.value=first.toISOString().slice(0,10);rTo.value=today();renderAll();
-// VIGILANTE INTELIGENTE POR OBSERVADOR DE CAMBIOS
+// VIGILANTE DEFINITIVO PARA ENLACES Y BOTONES DE RESPALDO
 const observer = new MutationObserver(() => {
-    const botones = Array.from(document.querySelectorAll('button, a'));
-    const btnRestaurar = botones.find(el => el.textContent.toLowerCase().includes('restaurar'));
+    // Buscamos cualquier elemento en la página cuyo texto incluya "Restaurar"
+    const elementos = Array.from(document.querySelectorAll('button, a, div, span'));
+    const btnRestaurar = elementos.find(el => el.textContent.trim().toLowerCase() === 'restaurar respaldo');
     
     if (btnRestaurar && !document.getElementById('btn-config-password')) {
         const btnPass = document.createElement('button');
         btnPass.id = 'btn-config-password';
         btnPass.type = 'button';
         btnPass.innerHTML = '🔒 Configurar Contraseña';
-        btnPass.className = btnRestaurar.className; 
+        btnPass.className = btnRestaurar.className; // Hereda el estilo exacto
         btnPass.style.marginLeft = '10px';
         btnPass.style.backgroundColor = '#4f46e5';
         btnPass.style.color = 'white';
         btnPass.style.cursor = 'pointer';
         btnPass.onclick = configurarPassword;
         
+        // Insertamos nuestro botón justo al lado del elemento encontrado
         btnRestaurar.parentNode.insertBefore(btnPass, btnRestaurar.nextSibling);
     }
 });
