@@ -6,9 +6,9 @@
 <title>Mis Finanzas Personales</title>
 <link rel="manifest" href="manifest.json">
 <script>
- // if ('serviceWorker' in navigator) {
-   // navigator.serviceWorker.register('sw.js');
-  // }
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
 </script>
  <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#20243a;--muted:#737a90;--pri:#0f5f70;--pri2:#2d8190;--green:#18855d;--red:#d84b5a;--amber:#c98517;--blue:#397bd1;--line:#e5e7ef;--shadow:0 12px 34px rgba(42,37,82,.10)}
@@ -97,98 +97,29 @@ body{background:linear-gradient(180deg,#eef3f4 0,#f7f9fa 320px,#f7f9fa 100%);let
 </style>
 </head>
 <body>
-<!-- Overlay de Bloqueo por Contraseña -->
-<div id="lock-screen-pass" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,31,45,0.98); color:#fff; z-index:999999; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
-  <div style="background:#123e49; padding:30px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5); max-width:350px; width:90%;">
-    <h2 style="margin-top:0; color:#2d8190;">🔒 Ingrese su Clave</h2>
-    <p style="font-size:13px; color:#b0bec5;">Esta plantilla está protegida por clave de privacidad.</p>
-    
-    <input type="password" id="input-pass-login" placeholder="Contraseña" style="width:100%; padding:12px; border-radius:6px; border:1px solid #2d8190; margin-bottom:15px; background:#0e2a32; color:#fff; font-size:16px; text-align:center;">
-    
-    <button onclick="verificarPassword()" style="width:100%; background:#16825d; color:white; border:none; padding:12px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:15px;">
-      Desbloquear
-    </button>
-    
-    <p id="pass-error-msg" style="color:#ff6b6b; font-size:12px; margin-top:10px; display:none;">Contraseña incorrecta</p>
-  </div>
-</div>
-
-<!-- Modal para Configurar o Cambiar Contraseña -->
-<div id="modal-config-pass" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:99999; justify-content:center; align-items:center;">
-  <div style="background:#fff; color:#333; padding:25px; border-radius:12px; max-width:400px; width:90%;">
-    <h3 style="margin-top:0; color:#0f5f70;">Configuración de Privacidad</h3>
-    <p style="font-size:12px; color:#666;">Cree una clave para proteger sus datos financieros en este dispositivo.</p>
-    
-    <label style="display:block; font-size:12px; margin-bottom:5px; font-weight:bold;">Nueva Contraseña:</label>
-    <input type="password" id="input-new-pass" placeholder="Escriba su clave" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; margin-bottom:15px;">
-    
-    <div style="display:flex; gap:10px; justify-content:flex-end;">
-      <button onclick="quitarPassword()" style="background:#d64b5a; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">Quitar Clave</button>
-      <button onclick="cerrarModalPassword()" style="background:#ccc; color:#333; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">Cancelar</button>
-      <button onclick="guardarNuevaPassword()" style="background:#16825d; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; font-weight:bold;">Guardar Clave</button>
-  </div>
-</div>
 <div class="app">
-<aside class="side"><div class="brand"><span class="brand-mark">MF</span><span>Mis Finanzas Personales<small>GESTIÓN Y PLANIFICACIÓN</small></span></div>
+<aside class="side"><div class="brand"><span class="brand-mark">MF</span><span>Mis Finanzas Personales<small>GESTIÓN Y PLANIFICACIÓN</small></span></div><div class="nav" id="nav">
 <div class="nav-group">Resumen</div>
-<button class="active" data-sec="inicio">📊 Dashboard</button>
+<button class="active" data-sec="inicio">▦ Dashboard</button><button data-sec="analitica">⌁ Analítica</button><button data-sec="reportes">▤ Reportes</button>
 <div class="nav-group">Dinero diario</div>
-<button data-sec="movimientos">$ Movimientos</button><button data-sec="cuentas">💳 Cuentas</button>
+<button data-sec="movimientos">↕ Movimientos</button><button data-sec="cuentas">▣ Cuentas</button><button data-sec="tarjetas">▰ Tarjetas</button><button data-sec="recurrentes">↻ Recurrentes</button><button data-sec="calendario">□ Calendario</button>
 <div class="nav-group">Planificación</div>
-<button data-sec="presupuestos">📋 Presupuestos</button><button data-sec="metas">🎯 Metas</button>
+<button data-sec="presupuestos">≡ Presupuestos</button><button data-sec="metas">◎ Metas</button><button data-sec="regla503020">◫ Regla 50/30/20</button>
 <div class="nav-group">Crecimiento y deuda</div>
-<button data-sec="deudas">🏛 Deudas y cuotas</button><button data-sec="nieve">❄ Bola de nieve</button>
+<button data-sec="deudas">▥ Deudas y cuotas</button><button data-sec="nieve">◇ Bola de nieve</button><button data-sec="inversiones">↗ Inversiones</button><button data-sec="patrimonio">⌂ Patrimonio</button>
 <div class="nav-group">Sistema</div>
 <button data-sec="datos">⚙ Configuración</button>
-<button onclick="abrirModalPassword()" style="background:#0f5f70;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:bold;margin-top:8px;width:100%;">🔒 Clave de Privacidad</button>
-</div><div class="side-foot">Tus datos se guardan localmente en este navegador.
+</div><div class="side-foot">Tus datos se guardan localmente en este navegador. Puedes exportar un respaldo cuando quieras.</div></aside>
 <main class="main">
 <section id="inicio" class="section active">
-  <div class="top">
-    <div>
-      <h1>Dashboard financiero</h1>
-      <p id="periodText"></p>
-    </div>
-  </div>
-
-  <div class="banner">
-    <div>
-      <h2 id="greeting">Tu dinero, más claro.</h2>
-      <p>Resumen del mes y métricas clave</p>
-    </div>
-  </div>
-
-  <!-- Bloque 1: Resumen -->
-  <div class="section-label">Resumen del mes</div>
-  <div class="grid dashboard-kpis">
-    <!-- Aquí van tus tarjetas/KPIs -->
-  </div>
-
-  <!-- Bloque 2: Evolución -->
-  <div class="section-label section-gap">Evolución y distribución</div>
-  <div class="grid charts-evolution">
-    <!-- Aquí van tus gráficos -->
-  </div>
-
-  <!-- Bloque 3: Indicadores -->
-  <div class="section-label section-gap">Indicadores estratégicos</div>
-  <div class="grid indicators">
-    <!-- Contenido de indicadores -->
-  </div>
-
-  <!-- Bloque 4: Planificación -->
-  <div class="section-label section-gap">Planificación rápida</div>
-  <div class="quick-planning">
-    <!-- Contenido de planificación -->
-  </div>
-
-  <!-- Bloque 5: Actividad -->
-  <div class="section-label section-gap">Actividad reciente</div>
-  <div class="card">
-    <!-- Tabla o lista de actividad -->
-  </div>
-
-</section> <!-- Aquí se cierra correctamente la sección -->
+<div class="top"><div><h1>Dashboard financiero</h1><p id="periodText"></p></div><div class="top-actions"><button class="btn green" onclick="openMove('ingreso')">+ Ingreso</button><button class="btn danger" onclick="openMove('gasto')">+ Gasto</button><button class="btn primary" onclick="openInvestment()">+ Inversión</button></div></div>
+<div class="banner"><div><h2 id="greeting">Tu dinero, más claro.</h2><p>Resumen de flujo, ahorro, deuda, inversiones y patrimonio en una sola vista.</p></div><span class="pill" id="healthPill">Calculando salud financiera…</span></div>
+<div class="section-label">Resumen del mes</div><div class="grid dashboard-kpis"><div class="card kpi"><div class="lbl">Ingresos del mes</div><div class="val pos" id="kIncome">$0</div><div class="sub" id="kIncomeDelta">Mes actual</div></div><div class="card kpi"><div class="lbl">Gastos del mes</div><div class="val neg" id="kExpense">$0</div><div class="sub" id="kExpenseDelta">Mes actual</div></div><div class="card kpi"><div class="lbl">Balance mensual</div><div class="val" id="kBalance">$0</div><div class="sub">Ingresos menos gastos</div></div><div class="card kpi"><div class="lbl">Tasa de ahorro</div><div class="val" id="kSaveRate">0%</div><div class="sub">Meta configurada</div></div><div class="card kpi"><div class="lbl">Saldo disponible</div><div class="val" id="kTotal">$0</div><div class="sub">Cuentas y efectivo</div></div><div class="card kpi"><div class="lbl">Deuda total</div><div class="val neg" id="kDebtTotal">$0</div><div class="sub">Deudas + tarjetas</div></div><div class="card kpi"><div class="lbl">Inversiones</div><div class="val" id="kInvest">$0</div><div class="sub" id="kInvestReturn">Rentabilidad 0%</div></div><div class="card kpi"><div class="lbl">Patrimonio neto</div><div class="val" id="kNetWorth">$0</div><div class="sub">Activos - obligaciones</div></div></div>
+<div class="section-label section-gap">Evolución y distribución</div><div class="grid two"><div class="card"><h2>Flujo mensual · últimos 12 meses</h2><canvas id="chartMonthly" class="chart" width="900" height="290"></canvas></div><div class="card"><h2>Gastos por categoría</h2><canvas id="chartCats" class="chart donut" width="460" height="290"></canvas></div></div>
+<div class="section-label section-gap">Indicadores estratégicos</div><div class="grid chart-grid"><div class="card"><h2>Patrimonio neto · tendencia</h2><canvas id="chartNet" class="chart" width="520" height="250"></canvas></div><div class="card"><h2>Deuda pendiente</h2><canvas id="chartDebt" class="chart" width="520" height="250"></canvas></div><div class="card"><h2>Inversiones · ganancia/pérdida</h2><canvas id="chartInvest" class="chart" width="520" height="250"></canvas></div></div>
+<div class="section-label section-gap">Planificación rápida</div><div class="quick-plan-grid"><div class="card quick-plan-card"><h2>Regla 50/30/20 <span class="pill">Distribución</span></h2><div class="quick-body" id="home503020"></div></div><div class="card quick-plan-card"><h2>Próximos vencimientos <span class="pill amber">Fechas</span></h2><div class="quick-body" id="nextDue"></div></div><div class="card quick-plan-card"><h2>Metas de ahorro <span class="pill green">Progreso</span></h2><div class="quick-body" id="homeGoals"></div></div></div>
+<div class="section-label section-gap">Actividad reciente</div><div class="card"><h2>Últimos movimientos</h2><div id="recentMoves"></div></div>
+</section>
 <section id="movimientos" class="section"><div class="top"><div><h1>Movimientos</h1><p>Registra ingresos, gastos y transferencias.</p></div><button class="btn primary" onclick="openMove('gasto')">+ Nuevo movimiento</button></div><div class="card"><div class="filters"><input type="month" id="fMonth"><select id="fType"><option value="">Todos los tipos</option><option value="ingreso">Ingresos</option><option value="gasto">Gastos</option></select><select id="fCat"><option value="">Todas las categorías</option></select><select id="fAccount"><option value="">Todas las cuentas</option></select><input id="fText" placeholder="Buscar descripción..."><button class="btn" onclick="renderMoves()">Filtrar</button><button class="btn" onclick="clearMoveFilters()">Limpiar</button></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Descripción</th><th>Categoría</th><th>Cuenta</th><th>Medio</th><th>Monto</th><th>Acciones</th></tr></thead><tbody id="moveRows"></tbody></table></div></div></section>
 <section id="cuentas" class="section"><div class="top"><div><h1>Cuentas</h1><p>Efectivo, banco, ahorro y billeteras.</p></div><button class="btn primary" onclick="openAccount()">+ Nueva cuenta</button></div><div class="grid three" id="accountCards"></div></section>
 <section id="tarjetas" class="section"><div class="top"><div><h1>Tarjetas</h1><p>Controla límites, deuda utilizada y fechas importantes.</p></div><button class="btn primary" onclick="openCard()">+ Nueva tarjeta</button></div><div class="grid three" id="cardCards"></div></section>
@@ -212,28 +143,8 @@ body{background:linear-gradient(180deg,#eef3f4 0,#f7f9fa 320px,#f7f9fa 100%);let
 <div id="reportSheet" class="report-sheet"><div class="report-head"><div><div class="report-brand" id="reportOwner">Mis Finanzas Personales</div><h1 id="reportTitle">Reporte general</h1><p id="reportPeriod">Período</p></div><div class="report-head-right"><div class="report-badge" id="reportBadge">GENERAL</div><div id="reportIssued" class="report-issued"></div></div></div><div class="report-rule"></div><div id="reportContent"></div><div class="report-footer"><div><b id="reportFooterOwner">Mis Finanzas Personales</b><span>Documento generado desde Mis Finanzas Personales.</span></div><div id="reportFooterPeriod"></div></div></div>
 </section>
 <section id="datos" class="section"><div class="top"><div><h1>Configuración y datos</h1><p>Personaliza categorías y protege tu información con respaldos.</p></div></div><div class="settings-grid"><div class="card"><h2>Perfil</h2><div class="form-grid"><div class="field span2"><label>Nombre</label><input id="profileName" placeholder="Nombre de la persona"></div><div class="field span2"><label>Nombre de Pyme / negocio</label><input id="profileCompany" placeholder="Opcional"></div><div class="field"><label>Moneda</label><select id="profileCurrency"><option value="CLP">CLP - Peso chileno</option><option value="USD">USD - Dólar</option><option value="EUR">EUR - Euro</option></select></div><div class="field"><label>Meta ahorro mensual (%)</label><input id="savingTarget" type="number" min="0" max="100" value="20"></div></div><div class="actions"><button class="btn primary" onclick="saveProfile()">Guardar perfil</button></div></div><div class="card"><h2>Categorías</h2><div class="filters"><input id="newCat" placeholder="Nueva categoría"><button class="btn primary" onclick="addCategory()">Agregar</button></div><div class="chip-wrap" id="catChips"></div></div><div class="card"><h2>Respaldo y restauración</h2><p class="muted tiny">Descarga un archivo con todos tus datos o restaura uno anterior.</p><div class="row-actions"><button class="btn primary" onclick="backup()">Descargar respaldo</button><label class="btn" for="restoreInput">Restaurar respaldo</label><input type="file" id="restoreInput" accept="application/json" hidden onchange="restoreFile(event)"></div><div class="note" style="margin-top:12px">Haz un respaldo antes de cambiar de computador o borrar datos del navegador.</div></div><div class="card"><h2>Zona de limpieza</h2><p class="muted tiny">Esta acción elimina todos los datos locales de este sistema.</p><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div></section>
-<!-- En la tarjeta de Respaldo y restauración de tu HTML -->
-<div class="card">
-  <h2>Respaldo y restauración</h2>
-  <p class="muted tiny">Descarga un archivo con todos tus datos o restaura uno anterior.</p>
-  
-  <div class="row-actions">
-    <button onclick="descargarRespaldo()">Descargar respaldo</button>
-    <button onclick="restaurarRespaldo()">Restaurar respaldo</button>
-    
-    <!-- AGREGA ESTA LÍNEA AQUÍ: -->
-    <button onclick="abrirModalPassword()" style="background: #0F5F70; color: white;">
-      🔒 Clave de seguridad
-    </button>
-  </div>
-  
- <div class="note" style="margin-top:12px">
-      Haz un respaldo antes de cambiar de computador...
-    </div>
-  </div> <!-- Cierra el <div class="card"> -->
-</section> <!-- Cierra la <section id="datos"> -->
+</main></div>
 
-</main> <!-- Cierra el <main class="main"> -->
 <div class="modal" id="moveModal"><div class="modal-card"><div class="modal-head"><h2 id="moveTitle">Nuevo movimiento</h2><button class="x" onclick="closeModal('moveModal')">✕</button></div><div class="form-grid"><input type="hidden" id="mId"><div class="field"><label>Tipo</label><select id="mType"><option value="ingreso">Ingreso</option><option value="gasto">Gasto</option></select></div><div class="field"><label>Fecha</label><input type="date" id="mDate"></div><div class="field span2"><label>Descripción</label><input id="mDesc" placeholder="Ej: Supermercado, sueldo, arriendo"></div><div class="field"><label>Categoría</label><select id="mCat"></select></div><div class="field"><label>Cuenta</label><select id="mAccount"></select></div><div class="field"><label>Medio de pago</label><select id="mMethod"><option>Efectivo</option><option>Débito</option><option>Crédito</option><option>Transferencia</option><option>Otro</option></select></div><div class="field"><label>Monto</label><input type="number" id="mAmount" min="0" step="1"></div><div class="field span4"><label>Nota</label><textarea id="mNote" rows="2" placeholder="Opcional"></textarea></div></div><div class="actions"><button class="btn" onclick="closeModal('moveModal')">Cancelar</button><button class="btn primary" onclick="saveMove()">Guardar</button></div></div></div>
 <div class="modal" id="accountModal"><div class="modal-card"><div class="modal-head"><h2>Nueva cuenta</h2><button class="x" onclick="closeModal('accountModal')">✕</button></div><div class="form-grid"><div class="field span2"><label>Nombre</label><input id="aName" placeholder="Ej: Cuenta RUT, Efectivo"></div><div class="field"><label>Tipo</label><select id="aType"><option>Cuenta corriente</option><option>Cuenta vista</option><option>Ahorro</option><option>Efectivo</option><option>Billetera digital</option><option>Inversión</option><option>Otro</option></select></div><div class="field"><label>Saldo inicial</label><input type="number" id="aBalance" value="0"></div></div><div class="actions"><button class="btn" onclick="closeModal('accountModal')">Cancelar</button><button class="btn primary" onclick="saveAccount()">Guardar</button></div></div></div>
 <div class="modal" id="cardModal"><div class="modal-card"><div class="modal-head"><h2>Nueva tarjeta</h2><button class="x" onclick="closeModal('cardModal')">✕</button></div><div class="form-grid"><div class="field span2"><label>Nombre</label><input id="cName" placeholder="Ej: Visa Banco"></div><div class="field"><label>Cupo total</label><input id="cLimit" type="number" min="0"></div><div class="field"><label>Deuda actual</label><input id="cUsed" type="number" min="0"></div><div class="field"><label>Día de cierre</label><input id="cClose" type="number" min="1" max="31"></div><div class="field"><label>Día de pago</label><input id="cPay" type="number" min="1" max="31"></div><div class="field span2"><label>Notas</label><input id="cNote"></div></div><div class="actions"><button class="btn" onclick="closeModal('cardModal')">Cancelar</button><button class="btn primary" onclick="saveCard()">Guardar</button></div></div></div>
@@ -269,7 +180,7 @@ function netWorth(){return totalAccounts()+totalAssets()+investmentValue()-total
 function nav(){document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(b.dataset.sec).classList.add('active');if(b.dataset.sec==='calendario')renderCalendar();if(b.dataset.sec==='reportes')renderReport();if(b.dataset.sec==='nieve')renderSnowball();if(b.dataset.sec==='inversiones')renderInvestments();if(b.dataset.sec==='regla503020')render503020();if(b.dataset.sec==='analitica')renderAnalytics()})}
 function fillSelects(){let catOpts=data.categories.map(c=>`<option>${esc(c)}</option>`).join('');['mCat','bCat','recCat'].forEach(i=>{let e=document.getElementById(i);if(e)e.innerHTML=catOpts});let accOpts=data.accounts.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('');['mAccount','recAccount'].forEach(i=>{let e=document.getElementById(i);if(e)e.innerHTML=accOpts});fCat.innerHTML='<option value="">Todas las categorías</option>'+catOpts;fAccount.innerHTML='<option value="">Todas las cuentas</option>'+accOpts;rAccount.innerHTML='<option value="">Todas las cuentas</option>'+accOpts}
 function renderAll(){data.calendarNotes=data.calendarNotes||[];data.profile=data.profile||{};fillSelects();renderHome();renderMoves();renderAccounts();renderCards();renderDebts();renderBudgets();renderGoals();renderRecurring();renderAssets();renderInvestments();renderSnowball();render503020();renderAnalytics();renderCats();renderCalendar();renderReport();profileName.value=data.profile.name||'';profileCompany.value=data.profile.company||'';profileCurrency.value=data.profile.currency||'CLP';savingTarget.value=data.profile.savingTarget??20;if(document.getElementById('calOwner'))calOwner.value=data.profile.calendarOwner||data.profile.company||data.profile.name||''}
-function renderHome(){let s=monthStats(),prevDate=new Date();prevDate.setMonth(prevDate.getMonth()-1);let pm=prevDate.toISOString().slice(0,7),ps=monthStats(pm);periodText.textContent=new Intl.DateTimeFormat('es-CL',{month:'long',year:'numeric'}).format(new Date());(document.getElementById('xIncome') || document.getElementById('income') || {}).textContent = money(s.i);xExpense.textContent=money(s.g);xBalance.textContent=money(s.b);xBalance.className='val '+(s.b>=0?'pos':'neg');let rate=s.i?Math.round(Math.max(0,s.b)/s.i*100):0;xSaveRate.textContent=rate+'%';xSaveRate.className='val '+(rate>=Number(data.profile.savingTarget||20)?'pos':rate>=0?'':'neg');xTotal.textContent=money(totalAccounts());let debt=totalDebts()+totalCards();xDebtTotal.textContent=money(debt);xInvest.textContent=money(investmentValue());let ir=investmentCost()?investmentGain()/investmentCost()*100:0;xInvestReturn.textContent=`Rentabilidad ${ir>=0?'+':''}${ir.toFixed(1)}%`;xInvest.className='val '+(investmentGain()>=0?'pos':'neg');xNetWorth.textContent=money(netWorth());xNetWorth.className='val '+(netWorth()>=0?'pos':'neg');let pct=(a,b)=>b?Math.round((a-b)/Math.abs(b)*100):null;let di=pct(s.i,ps.i),dg=pct(s.g,ps.g);xIncomeDelta.textContent=di===null?'Sin comparación anterior':`${di>=0?'▲':'▼'} ${Math.abs(di)}% vs mes anterior`;xExpenseDelta.textContent=dg===null?'Sin comparación anterior':`${dg>=0?'▲':'▼'} ${Math.abs(dg)}% vs mes anterior`;let target=Number(data.profile.savingTarget||20);healthPill.textContent=s.i===0?'Sin ingresos registrados':rate>=target?'Salud financiera: buena':s.b>=0?'Salud financiera: ajustada':'Salud financiera: en déficit';healthPill.className='pill '+(s.i===0?'':rate>=target?'green':s.b>=0?'amber':'red');greeting.textContent=data.profile.name?`Hola, ${data.profile.name}. Tus finanzas de un vistazo.`:'Tu dinero, más claro.';let rec=[...data.moves].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8);recentMoves.innerHTML=rec.length?'<div class="mini-list">'+rec.map(m=>`<div class="mini"><div><b>${esc(m.description)}</b><div class="meta">${m.date} · ${esc(m.category)}</div></div><span class="money ${m.type==='ingreso'?'pos':'neg'}">${m.type==='ingreso'?'+':'-'}${money(m.amount)}</span></div>`).join('')+'</div>':'<div class="empty">Aún no hay movimientos.</div>';homeGoals.innerHTML=data.goals.length?'<div class="quick-list">'+data.goals.slice(0,4).map(g=>{let p=Math.min(100,Math.round(Number(g.saved||0)/Math.max(1,Number(g.target))*100));return `<div class="quick-goal"><div class="quick-goal-top"><div class="quick-goal-name">${esc(g.name)}</div><div class="quick-goal-pct">${p}%</div></div><div class="progress green"><i style="width:${p}%"></i></div><div class="quick-goal-bottom"><span>${money(g.saved)} ahorrado</span><span>Meta ${money(g.target)}</span></div></div>`}).join('')+'</div>':'<div class="empty">Aún no hay metas.</div>';renderUpcoming();renderHome503020();drawMonthly();drawCats();drawNetWorth();drawDebtChart();drawInvestmentMini()}
+function renderHome(){let s=monthStats(),prevDate=new Date();prevDate.setMonth(prevDate.getMonth()-1);let pm=prevDate.toISOString().slice(0,7),ps=monthStats(pm);periodText.textContent=new Intl.DateTimeFormat('es-CL',{month:'long',year:'numeric'}).format(new Date());kIncome.textContent=money(s.i);kExpense.textContent=money(s.g);kBalance.textContent=money(s.b);kBalance.className='val '+(s.b>=0?'pos':'neg');let rate=s.i?Math.round(Math.max(0,s.b)/s.i*100):0;kSaveRate.textContent=rate+'%';kSaveRate.className='val '+(rate>=Number(data.profile.savingTarget||20)?'pos':rate>=0?'':'neg');kTotal.textContent=money(totalAccounts());let debt=totalDebts()+totalCards();kDebtTotal.textContent=money(debt);kInvest.textContent=money(investmentValue());let ir=investmentCost()?investmentGain()/investmentCost()*100:0;kInvestReturn.textContent=`Rentabilidad ${ir>=0?'+':''}${ir.toFixed(1)}%`;kInvest.className='val '+(investmentGain()>=0?'pos':'neg');kNetWorth.textContent=money(netWorth());kNetWorth.className='val '+(netWorth()>=0?'pos':'neg');let pct=(a,b)=>b?Math.round((a-b)/Math.abs(b)*100):null;let di=pct(s.i,ps.i),dg=pct(s.g,ps.g);kIncomeDelta.textContent=di===null?'Sin comparación anterior':`${di>=0?'▲':'▼'} ${Math.abs(di)}% vs mes anterior`;kExpenseDelta.textContent=dg===null?'Sin comparación anterior':`${dg>=0?'▲':'▼'} ${Math.abs(dg)}% vs mes anterior`;let target=Number(data.profile.savingTarget||20);healthPill.textContent=s.i===0?'Sin ingresos registrados':rate>=target?'Salud financiera: buena':s.b>=0?'Salud financiera: ajustada':'Salud financiera: en déficit';healthPill.className='pill '+(s.i===0?'':rate>=target?'green':s.b>=0?'amber':'red');greeting.textContent=data.profile.name?`Hola, ${data.profile.name}. Tus finanzas de un vistazo.`:'Tu dinero, más claro.';let rec=[...data.moves].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8);recentMoves.innerHTML=rec.length?'<div class="mini-list">'+rec.map(m=>`<div class="mini"><div><b>${esc(m.description)}</b><div class="meta">${m.date} · ${esc(m.category)}</div></div><span class="money ${m.type==='ingreso'?'pos':'neg'}">${m.type==='ingreso'?'+':'-'}${money(m.amount)}</span></div>`).join('')+'</div>':'<div class="empty">Aún no hay movimientos.</div>';homeGoals.innerHTML=data.goals.length?'<div class="quick-list">'+data.goals.slice(0,4).map(g=>{let p=Math.min(100,Math.round(Number(g.saved||0)/Math.max(1,Number(g.target))*100));return `<div class="quick-goal"><div class="quick-goal-top"><div class="quick-goal-name">${esc(g.name)}</div><div class="quick-goal-pct">${p}%</div></div><div class="progress green"><i style="width:${p}%"></i></div><div class="quick-goal-bottom"><span>${money(g.saved)} ahorrado</span><span>Meta ${money(g.target)}</span></div></div>`}).join('')+'</div>':'<div class="empty">Aún no hay metas.</div>';renderUpcoming();renderHome503020();drawMonthly();drawCats();drawNetWorth();drawDebtChart();drawInvestmentMini()}
 function renderUpcoming(){let items=[],now=new Date(),y=now.getFullYear(),m=now.getMonth();data.debts.forEach(d=>{if(Number(d.pending)>0){let dd=new Date(y,m,clampDay(y,m,Number(d.dueDay||1)));if(dd<new Date(now.toDateString()))dd=new Date(y,m+1,clampDay(y,m+1,Number(d.dueDay||1)));items.push({date:dd,label:d.name,amount:d.payment,type:'Deuda'})}});data.cards.forEach(c=>{if(Number(c.used)>0){let dd=new Date(y,m,clampDay(y,m,Number(c.payDay||1)));if(dd<new Date(now.toDateString()))dd=new Date(y,m+1,clampDay(y,m+1,Number(c.payDay||1)));items.push({date:dd,label:c.name,amount:c.used,type:'Tarjeta'})}});data.recurrings.filter(r=>r.active).forEach(r=>{let dd=new Date(y,m,clampDay(y,m,Number(r.day||1)));if(dd<new Date(now.toDateString()))dd=new Date(y,m+1,clampDay(y,m+1,Number(r.day||1)));items.push({date:dd,label:r.description,amount:r.amount,type:r.type==='gasto'?'Gasto':'Ingreso'})});items.sort((a,b)=>a.date-b.date);nextDue.innerHTML=items.length?'<div class="quick-list">'+items.slice(0,5).map(x=>`<div class="quick-item"><div class="quick-item-main"><div class="quick-item-title">${esc(x.label)}</div><div class="quick-item-meta">${x.date.toLocaleDateString('es-CL')} · ${x.type}</div></div><div class="quick-item-value ${x.type==='Ingreso'?'good':'bad'}">${money(x.amount)}</div></div>`).join('')+'</div>':'<div class="empty">Sin vencimientos próximos.</div>'}
 function openMove(type='gasto'){mId.value='';mType.value=type;mDate.value=today();mDesc.value='';mAmount.value='';mNote.value='';mMethod.value='Débito';fillSelects();moveTitle.textContent=type==='ingreso'?'Nuevo ingreso':'Nuevo gasto';showModal('moveModal')}
 function saveMove(){let amount=Number(mAmount.value);if(!mDate.value||!mDesc.value.trim()||amount<=0)return alert('Completa fecha, descripción y un monto mayor a 0.');let obj={id:mId.value||id(),type:mType.value,date:mDate.value,description:mDesc.value.trim(),category:mCat.value,accountId:mAccount.value,method:mMethod.value,amount,note:mNote.value.trim()};if(mId.value){let i=data.moves.findIndex(x=>x.id===mId.value);data.moves[i]=obj}else data.moves.push(obj);closeModal('moveModal');persist()}
@@ -397,8 +308,8 @@ function changeCal(n){calDate=new Date(calDate.getFullYear(),calDate.getMonth()+
 function renderCats(){catChips.innerHTML=data.categories.map(c=>`<span class="chip">${esc(c)}</span>`).join('')}
 function addCategory(){let c=newCat.value.trim();if(!c)return;if(!data.categories.includes(c))data.categories.push(c);newCat.value='';persist()}
 function saveProfile(){data.profile.name=profileName.value.trim();data.profile.company=profileCompany.value.trim();data.profile.calendarOwner=data.profile.calendarOwner||data.profile.company||data.profile.name||'';data.profile.currency=profileCurrency.value;data.profile.savingTarget=Math.max(0,Math.min(100,Number(savingTarget.value||0)));persist();alert('Perfil guardado.')}
-function exportCSV(){let rows=[['Fecha','Tipo','Descripción','Categoría','Cuenta','Medio','Monto','Nota'],...data.moves.map(m=>[m.date,m.type,m.description,m.category,data.accounts.find(a=>a.id===m.accountId)?.name||'',m.method||'',m.amount,m.note||''])];let csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(';')).join('\n');downloadBlob(csv,'movimientos_finanzas.csv','text/csv;charset=utf-8')}
-function backup(){downloadBlob(JSON.stringify(data,null,2),'respaldo_finanzas.json','application/json')}
+function exportCSV(){let rows=[['Fecha','Tipo','Descripción','Categoría','Cuenta','Medio','Monto','Nota'],...data.moves.map(m=>[m.date,m.type,m.description,m.category,data.accounts.find(a=>a.id===m.accountId)?.name||'',m.method||'',m.amount,m.note||''])];let csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(';')).join('\n');downloadBlob(csv,'movimientos_finanzas_pia.csv','text/csv;charset=utf-8')}
+function backup(){downloadBlob(JSON.stringify(data,null,2),'respaldo_finanzas_pia_pro.json','application/json')}
 function downloadBlob(content,name,type){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 function restoreFile(ev){let f=ev.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x||!Array.isArray(x.moves)||!Array.isArray(x.accounts))throw 0;data=migrate(x);persist();alert('Respaldo restaurado correctamente.')}catch{alert('El archivo no parece ser un respaldo válido.')}};r.readAsText(f);ev.target.value=''}
 window.addEventListener('afterprint',()=>document.body.classList.remove('print-report','print-calendar'));
@@ -406,58 +317,6 @@ function resetAll(){if(confirm('¿Seguro? Se borrarán todos los datos guardados
 function showModal(x){document.getElementById(x).classList.add('show')}function closeModal(x){document.getElementById(x).classList.remove('show')}
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
 nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),first=new Date(dd.getFullYear(),dd.getMonth(),1);rFrom.value=first.toISOString().slice(0,10);rTo.value=today();renderAll();
-
-// Lógica de Clave de Privacidad
-  const PASS_KEY = 'user_app_password';
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const savedPass = localStorage.getItem(PASS_KEY);
-    if (savedPass) {
-      const lockScreen = document.getElementById('lock-screen-pass');
-      if (lockScreen) lockScreen.style.display = 'flex';
-    }
-  });
-
-  window.verificarPassword = function() {
-    const inputVal = document.getElementById('input-pass-login').value;
-    const savedPass = localStorage.getItem(PASS_KEY);
-    const errorMsg = document.getElementById('pass-error-msg');
-
-    if (inputVal === savedPass) {
-      document.getElementById('lock-screen-pass').style.display = 'none';
-      document.getElementById('input-pass-login').value = '';
-      if (errorMsg) errorMsg.style.display = 'none';
-    } else {
-      if (errorMsg) errorMsg.style.display = 'block';
-    }
-  };
-
-  window.abrirModalPassword = function() {
-    document.getElementById('modal-config-pass').style.display = 'flex';
-  };
-
-  window.cerrarModalPassword = function() {
-    document.getElementById('modal-config-pass').style.display = 'none';
-  };
-
-  window.guardarNuevaPassword = function() {
-    const newPass = document.getElementById('input-new-pass').value.trim();
-    if (newPass.length < 3) {
-      alert('La contraseña debe tener al menos 3 caracteres.');
-      return;
-    }
-    localStorage.setItem(PASS_KEY, newPass);
-    alert('¡Clave de privacidad guardada exitosamente!');
-    cerrarModalPassword();
-  };
-
-  window.quitarPassword = function() {
-    if (confirm('¿Deseas eliminar la protección por clave de privacidad?')) {
-      localStorage.removeItem(PASS_KEY);
-      alert('Se ha eliminado la clave de privacidad.');
-      cerrarModalPassword();
-    }
-  };  
 </script>
 </body>
 </html>
