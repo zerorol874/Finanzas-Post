@@ -97,6 +97,39 @@ body{background:linear-gradient(180deg,#eef3f4 0,#f7f9fa 320px,#f7f9fa 100%);let
 </style>
 </head>
 <body>
+<!-- Overlay de Bloqueo por Contraseña -->
+<div id="lock-screen-pass" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,31,45,0.98); color:#fff; z-index:999999; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+  <div style="background:#123e49; padding:30px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5); max-width:350px; width:90%;">
+    <h2 style="margin-top:0; color:#2d8190;">🔒 Ingrese su Clave</h2>
+    <p style="font-size:13px; color:#b0bec5;">Esta plantilla está protegida por clave de privacidad.</p>
+    
+    <input type="password" id="input-pass-login" placeholder="Contraseña" style="width:100%; padding:12px; border-radius:6px; border:1px solid #2d8190; margin-bottom:15px; background:#0e2a32; color:#fff; font-size:16px; text-align:center;">
+    
+    <button onclick="verificarPassword()" style="width:100%; background:#16825d; color:white; border:none; padding:12px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:15px;">
+      Desbloquear
+    </button>
+    
+    <p id="pass-error-msg" style="color:#ff6b6b; font-size:12px; margin-top:10px; display:none;">Contraseña incorrecta</p>
+  </div>
+</div>
+
+<!-- Modal para Configurar o Cambiar Contraseña -->
+<div id="modal-config-pass" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:99999; justify-content:center; align-items:center;">
+  <div style="background:#fff; color:#333; padding:25px; border-radius:12px; max-width:400px; width:90%;">
+    <h3 style="margin-top:0; color:#0f5f70;">Configuración de Privacidad</h3>
+    <p style="font-size:12px; color:#666;">Cree una clave para proteger sus datos financieros en este dispositivo.</p>
+    
+    <label style="display:block; font-size:12px; margin-bottom:5px; font-weight:bold;">Nueva Contraseña:</label>
+    <input type="password" id="input-new-pass" placeholder="Escriba su clave" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; margin-bottom:15px;">
+    
+    <div style="display:flex; gap:10px; justify-content:flex-end;">
+      <button onclick="quitarPassword()" style="background:#d64b5a; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">Quitar Clave</button>
+      <button onclick="cerrarModalPassword()" style="background:#ccc; color:#333; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">Cancelar</button>
+      <button onclick="guardarNuevaPassword()" style="background:#16825d; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; font-weight:bold;">Guardar Clave</button>
+    </div>
+  </div>
+
+</div>  
 <div class="app">
 <aside class="side"><div class="brand"><span class="brand-mark">MF</span><span>Mis Finanzas Personales<small>GESTIÓN Y PLANIFICACIÓN</small></span></div><div class="nav" id="nav">
 <div class="nav-group">Resumen</div>
@@ -109,6 +142,7 @@ body{background:linear-gradient(180deg,#eef3f4 0,#f7f9fa 320px,#f7f9fa 100%);let
 <button data-sec="deudas">▥ Deudas y cuotas</button><button data-sec="nieve">◇ Bola de nieve</button><button data-sec="inversiones">↗ Inversiones</button><button data-sec="patrimonio">⌂ Patrimonio</button>
 <div class="nav-group">Sistema</div>
 <button data-sec="datos">⚙ Configuración</button>
+<button onclick="abrirModalPassword()" style="background:#0f5f70; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; font-weight:bold; margin-top:8px; width:100%;">🔒 Clave de Privacidad</button> 
 </div><div class="side-foot">Tus datos se guardan localmente en este navegador. Puedes exportar un respaldo cuando quieras.</div></aside>
 <main class="main">
 <section id="inicio" class="section active">
@@ -317,6 +351,58 @@ function resetAll(){if(confirm('¿Seguro? Se borrarán todos los datos guardados
 function showModal(x){document.getElementById(x).classList.add('show')}function closeModal(x){document.getElementById(x).classList.remove('show')}
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
 nav();fMonth.value=nowMonth();budgetMonth.value=nowMonth();let dd=new Date(),first=new Date(dd.getFullYear(),dd.getMonth(),1);rFrom.value=first.toISOString().slice(0,10);rTo.value=today();renderAll();
+
+// Lógica de Clave de Privacidad
+  const PASS_KEY = 'user_app_password';
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedPass = localStorage.getItem(PASS_KEY);
+    if (savedPass) {
+      const lockScreen = document.getElementById('lock-screen-pass');
+      if (lockScreen) lockScreen.style.display = 'flex';
+    }
+  });
+
+  window.verificarPassword = function() {
+    const inputVal = document.getElementById('input-pass-login').value;
+    const savedPass = localStorage.getItem(PASS_KEY);
+    const errorMsg = document.getElementById('pass-error-msg');
+
+    if (inputVal === savedPass) {
+      document.getElementById('lock-screen-pass').style.display = 'none';
+      document.getElementById('input-pass-login').value = '';
+      if (errorMsg) errorMsg.style.display = 'none';
+    } else {
+      if (errorMsg) errorMsg.style.display = 'block';
+    }
+  };
+
+  window.abrirModalPassword = function() {
+    document.getElementById('modal-config-pass').style.display = 'flex';
+  };
+
+  window.cerrarModalPassword = function() {
+    document.getElementById('modal-config-pass').style.display = 'none';
+  };
+
+  window.guardarNuevaPassword = function() {
+    const newPass = document.getElementById('input-new-pass').value.trim();
+    if (newPass.length < 3) {
+      alert('La contraseña debe tener al menos 3 caracteres.');
+      return;
+    }
+    localStorage.setItem(PASS_KEY, newPass);
+    alert('¡Clave de privacidad guardada exitosamente!');
+    cerrarModalPassword();
+  };
+
+  window.quitarPassword = function() {
+    if (confirm('¿Deseas eliminar la protección por clave de privacidad?')) {
+      localStorage.removeItem(PASS_KEY);
+      alert('Se ha eliminado la clave de privacidad.');
+      cerrarModalPassword();
+    }
+  };  
 </script>
 </body>
 </html>
