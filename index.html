@@ -144,14 +144,51 @@ body{background:linear-gradient(180deg,#eef3f4 0,#f7f9fa 320px,#f7f9fa 100%);let
 </div><div class="side-foot">Tus datos se guardan localmente en este navegador.
 <main class="main">
 <section id="inicio" class="section active">
-<div class="top"><div><h1>Dashboard financiero</h1><p id="periodText"></p></div><div class="top-actions"><button class="btn green" onclick="openMove('ingreso')">+ Ingreso</button><button class="btn danger" onclick="openMove('gasto')">+ Gasto</button><button class="btn primary" onclick="openInvestment()">+ Inversión</button></div></div>
-<div class="banner"><div><h2 id="greeting">Tu dinero, más claro.</h2><p>Resumen de flujo, ahorro, deuda, inversiones y patrimonio en una sola vista.</p></div><span class="pill" id="healthPill">Calculando salud financiera…</span></div>
-<div class="section-label">Resumen del mes</div><div class="grid dashboard-kpis"><div class="card kpi"><div class="lbl">Ingresos del mes</div><div class="val pos" id="kIncome">$0</div><div class="sub" id="kIncomeDelta">Mes actual</div></div><div class="card kpi"><div class="lbl">Gastos del mes</div><div class="val neg" id="kExpense">$0</div><div class="sub" id="kExpenseDelta">Mes actual</div></div><div class="card kpi"><div class="lbl">Balance mensual</div><div class="val" id="kBalance">$0</div><div class="sub">Ingresos menos gastos</div></div><div class="card kpi"><div class="lbl">Tasa de ahorro</div><div class="val" id="kSaveRate">0%</div><div class="sub">Meta configurada</div></div><div class="card kpi"><div class="lbl">Saldo disponible</div><div class="val" id="kTotal">$0</div><div class="sub">Cuentas y efectivo</div></div><div class="card kpi"><div class="lbl">Deuda total</div><div class="val neg" id="kDebtTotal">$0</div><div class="sub">Deudas + tarjetas</div></div><div class="card kpi"><div class="lbl">Inversiones</div><div class="val" id="kInvest">$0</div><div class="sub" id="kInvestReturn">Rentabilidad 0%</div></div><div class="card kpi"><div class="lbl">Patrimonio neto</div><div class="val" id="kNetWorth">$0</div><div class="sub">Activos - obligaciones</div></div></div>
-<div class="section-label section-gap">Evolución y distribución</div><div class="grid two"><div class="card"><h2>Flujo mensual · últimos 12 meses</h2><canvas id="chartMonthly" class="chart" width="900" height="290"></canvas></div><div class="card"><h2>Gastos por categoría</h2><canvas id="chartCats" class="chart donut" width="460" height="290"></canvas></div></div>
-<div class="section-label section-gap">Indicadores estratégicos</div><div class="grid chart-grid"><div class="card"><h2>Patrimonio neto · tendencia</h2><canvas id="chartNet" class="chart" width="520" height="250"></canvas></div><div class="card"><h2>Deuda pendiente</h2><canvas id="chartDebt" class="chart" width="520" height="250"></canvas></div><div class="card"><h2>Inversiones · ganancia/pérdida</h2><canvas id="chartInvest" class="chart" width="520" height="250"></canvas></div></div>
-<div class="section-label section-gap">Planificación rápida</div><div class="quick-plan-grid"><div class="card quick-plan-card"><h2>Regla 50/30/20 <span class="pill">Distribución</span></h2><div class="quick-body" id="home503020"></div></div><div class="card quick-plan-card"><h2>Próximos vencimientos <span class="pill amber">Fechas</span></h2><div class="quick-body" id="nextDue"></div></div><div class="card quick-plan-card"><h2>Metas de ahorro <span class="pill green">Progreso</span></h2><div class="quick-body" id="homeGoals"></div></div></div>
-<div class="section-label section-gap">Actividad reciente</div><div class="card"><h2>Últimos movimientos</h2><div id="recentMoves"></div></div>
-</section>
+  <div class="top">
+    <div>
+      <h1>Dashboard financiero</h1>
+      <p id="periodText"></p>
+    </div>
+  </div>
+
+  <div class="banner">
+    <div>
+      <h2 id="greeting">Tu dinero, más claro.</h2>
+      <p>Resumen del mes y métricas clave</p>
+    </div>
+  </div>
+
+  <!-- Bloque 1: Resumen -->
+  <div class="section-label">Resumen del mes</div>
+  <div class="grid dashboard-kpis">
+    <!-- Aquí van tus tarjetas/KPIs -->
+  </div>
+
+  <!-- Bloque 2: Evolución -->
+  <div class="section-label section-gap">Evolución y distribución</div>
+  <div class="grid charts-evolution">
+    <!-- Aquí van tus gráficos -->
+  </div>
+
+  <!-- Bloque 3: Indicadores -->
+  <div class="section-label section-gap">Indicadores estratégicos</div>
+  <div class="grid indicators">
+    <!-- Contenido de indicadores -->
+  </div>
+
+  <!-- Bloque 4: Planificación -->
+  <div class="section-label section-gap">Planificación rápida</div>
+  <div class="quick-planning">
+    <!-- Contenido de planificación -->
+  </div>
+
+  <!-- Bloque 5: Actividad -->
+  <div class="section-label section-gap">Actividad reciente</div>
+  <div class="card">
+    <!-- Tabla o lista de actividad -->
+  </div>
+
+</section> <!-- Aquí se cierra correctamente la sección -->
 <section id="movimientos" class="section"><div class="top"><div><h1>Movimientos</h1><p>Registra ingresos, gastos y transferencias.</p></div><button class="btn primary" onclick="openMove('gasto')">+ Nuevo movimiento</button></div><div class="card"><div class="filters"><input type="month" id="fMonth"><select id="fType"><option value="">Todos los tipos</option><option value="ingreso">Ingresos</option><option value="gasto">Gastos</option></select><select id="fCat"><option value="">Todas las categorías</option></select><select id="fAccount"><option value="">Todas las cuentas</option></select><input id="fText" placeholder="Buscar descripción..."><button class="btn" onclick="renderMoves()">Filtrar</button><button class="btn" onclick="clearMoveFilters()">Limpiar</button></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Descripción</th><th>Categoría</th><th>Cuenta</th><th>Medio</th><th>Monto</th><th>Acciones</th></tr></thead><tbody id="moveRows"></tbody></table></div></div></section>
 <section id="cuentas" class="section"><div class="top"><div><h1>Cuentas</h1><p>Efectivo, banco, ahorro y billeteras.</p></div><button class="btn primary" onclick="openAccount()">+ Nueva cuenta</button></div><div class="grid three" id="accountCards"></div></section>
 <section id="tarjetas" class="section"><div class="top"><div><h1>Tarjetas</h1><p>Controla límites, deuda utilizada y fechas importantes.</p></div><button class="btn primary" onclick="openCard()">+ Nueva tarjeta</button></div><div class="grid three" id="cardCards"></div></section>
