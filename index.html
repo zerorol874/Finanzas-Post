@@ -126,24 +126,22 @@ body{background:linear-gradient(180deg,#eef3f4 0,#f7f9fa 320px,#f7f9fa 100%);let
       <button onclick="quitarPassword()" style="background:#d64b5a; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">Quitar Clave</button>
       <button onclick="cerrarModalPassword()" style="background:#ccc; color:#333; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">Cancelar</button>
       <button onclick="guardarNuevaPassword()" style="background:#16825d; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; font-weight:bold;">Guardar Clave</button>
-    </div>
   </div>
-
-</div>  
+</div>
 <div class="app">
-<aside class="side"><div class="brand"><span class="brand-mark">MF</span><span>Mis Finanzas Personales<small>GESTIÓN Y PLANIFICACIÓN</small></span></div><div class="nav" id="nav">
+<aside class="side"><div class="brand"><span class="brand-mark">MF</span><span>Mis Finanzas Personales<small>GESTIÓN Y PLANIFICACIÓN</small></span></div>
 <div class="nav-group">Resumen</div>
-<button class="active" data-sec="inicio">▦ Dashboard</button><button data-sec="analitica">⌁ Analítica</button><button data-sec="reportes">▤ Reportes</button>
+<button class="active" data-sec="inicio">📊 Dashboard</button>
 <div class="nav-group">Dinero diario</div>
-<button data-sec="movimientos">↕ Movimientos</button><button data-sec="cuentas">▣ Cuentas</button><button data-sec="tarjetas">▰ Tarjetas</button><button data-sec="recurrentes">↻ Recurrentes</button><button data-sec="calendario">□ Calendario</button>
+<button data-sec="movimientos">$ Movimientos</button><button data-sec="cuentas">💳 Cuentas</button>
 <div class="nav-group">Planificación</div>
-<button data-sec="presupuestos">≡ Presupuestos</button><button data-sec="metas">◎ Metas</button><button data-sec="regla503020">◫ Regla 50/30/20</button>
+<button data-sec="presupuestos">📋 Presupuestos</button><button data-sec="metas">🎯 Metas</button>
 <div class="nav-group">Crecimiento y deuda</div>
-<button data-sec="deudas">▥ Deudas y cuotas</button><button data-sec="nieve">◇ Bola de nieve</button><button data-sec="inversiones">↗ Inversiones</button><button data-sec="patrimonio">⌂ Patrimonio</button>
+<button data-sec="deudas">🏛 Deudas y cuotas</button><button data-sec="nieve">❄ Bola de nieve</button>
 <div class="nav-group">Sistema</div>
 <button data-sec="datos">⚙ Configuración</button>
-<button onclick="abrirModalPassword()" style="background:#0f5f70; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; font-weight:bold; margin-top:8px; width:100%;">🔒 Clave de Privacidad</button> 
-</div><div class="side-foot">Tus datos se guardan localmente en este navegador. Puedes exportar un respaldo cuando quieras.</div></aside>
+<button onclick="abrirModalPassword()" style="background:#0f5f70;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:bold;margin-top:8px;width:100%;">🔒 Clave de Privacidad</button>
+</div><div class="side-foot">Tus datos se guardan localmente en este navegador.
 <main class="main">
 <section id="inicio" class="section active">
 <div class="top"><div><h1>Dashboard financiero</h1><p id="periodText"></p></div><div class="top-actions"><button class="btn green" onclick="openMove('ingreso')">+ Ingreso</button><button class="btn danger" onclick="openMove('gasto')">+ Gasto</button><button class="btn primary" onclick="openInvestment()">+ Inversión</button></div></div>
